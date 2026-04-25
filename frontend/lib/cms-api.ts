@@ -7,8 +7,12 @@ export function getCmsToken() {
 }
 
 export function setCmsTokens(access: string, refresh: string) {
-  Cookies.set("cms_access_token", access, { expires: 1 / 24 }); // 1 hour
-  Cookies.set("cms_refresh_token", refresh, { expires: 7 }); // 7 days
+  const cookieOptions = {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict" as const,
+  };
+  Cookies.set("cms_access_token", access, { expires: 1 / 24, ...cookieOptions }); // 1 hour
+  Cookies.set("cms_refresh_token", refresh, { expires: 7, ...cookieOptions }); // 7 days
 }
 
 export function clearCmsTokens() {
@@ -22,9 +26,13 @@ export async function cmsFetch<T>(
 ): Promise<T> {
   const token = getCmsToken();
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
     ...(options?.headers || {}),
   };
+
+  // Only set application/json if body is not FormData
+  if (!(options?.body instanceof FormData) && !('Content-Type' in headers)) {
+    (headers as any)["Content-Type"] = "application/json";
+  }
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
@@ -46,7 +54,8 @@ export async function cmsFetch<T>(
       });
       if (refreshRes.ok) {
         const { access } = await refreshRes.json();
-        Cookies.set("cms_access_token", access, { expires: 1 / 24 });
+        const cookieOptions = { secure: process.env.NODE_ENV === "production", sameSite: "strict" as const };
+        Cookies.set("cms_access_token", access, { expires: 1 / 24, ...cookieOptions });
         headers["Authorization"] = `Bearer ${access}`;
         // Retry original request
         response = await fetch(`${API_URL}/cms${endpoint}`, { ...options, headers });

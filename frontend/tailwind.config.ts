@@ -6,6 +6,9 @@ const config: Config = {
     "./components/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}",
   ],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 
 export default config;

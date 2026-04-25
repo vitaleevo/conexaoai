@@ -2,10 +2,13 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from apps.blog.models import Post, Category, Tag, Author
+from apps.newsletter.models import Subscriber
+from .models import MediaAsset
 from .serializers import (
     PostListSerializer, PostDetailSerializer, 
     CategorySerializer, TagSerializer, 
-    AuthorSerializer, UserSerializer
+    AuthorSerializer, UserSerializer,
+    MediaAssetSerializer, SubscriberSerializer
 )
 
 class IsCmsUser(permissions.BasePermission):
@@ -51,3 +54,15 @@ class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
     permission_classes = [IsCmsUser]
     search_fields = ['user__first_name', 'user__last_name', 'user__username']
+
+class MediaAssetViewSet(viewsets.ModelViewSet):
+    queryset = MediaAsset.objects.all().order_by('-created_at')
+    serializer_class = MediaAssetSerializer
+    permission_classes = [IsCmsUser]
+
+class SubscriberViewSet(viewsets.ModelViewSet):
+    queryset = Subscriber.objects.all().order_by('-subscribed_at')
+    serializer_class = SubscriberSerializer
+    permission_classes = [IsCmsUser]
+    search_fields = ['email', 'name']
+    filterset_fields = ['is_active', 'confirmed']

@@ -2,15 +2,30 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Image as ImageIcon, Settings, Tag, Globe, ArrowLeft, Loader2, FileText } from "lucide-react";
+import { Save, Image as ImageIcon, Settings, Tag, Globe, ArrowLeft, Loader2, FileText, Eye, Edit3 } from "lucide-react";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { cmsFetch } from "@/lib/cms-api";
 
 interface Category { id: number; name: string; }
 interface Author { id: number; user: { username: string }; }
 
+interface PostData {
+  title?: string;
+  slug?: string;
+  excerpt?: string;
+  content?: string;
+  status?: string;
+  category?: string | number;
+  author?: string | number;
+  meta_title?: string;
+  meta_description?: string;
+  is_featured?: boolean;
+}
+
 interface PostFormProps {
-  initialData?: Record<string, unknown>;
+  initialData?: PostData;
   postId?: string;
 }
 
@@ -25,9 +40,10 @@ export default function PostForm({ initialData, postId }: PostFormProps) {
   const [slug, setSlug] = useState(initialData?.slug || "");
   const [excerpt, setExcerpt] = useState(initialData?.excerpt || "");
   const [content, setContent] = useState(initialData?.content || "");
+  const [isPreview, setIsPreview] = useState(false);
   const [status, setStatus] = useState(initialData?.status || "draft");
-  const [categoryId, setCategoryId] = useState(initialData?.category || "");
-  const [authorId, setAuthorId] = useState(initialData?.author || "");
+  const [categoryId, setCategoryId] = useState(initialData?.category ? String(initialData.category) : "");
+  const [authorId, setAuthorId] = useState(initialData?.author ? String(initialData.author) : "");
   const [metaTitle, setMetaTitle] = useState(initialData?.meta_title || "");
   const [metaDescription, setMetaDescription] = useState(initialData?.meta_description || "");
   const [isFeatured, setIsFeatured] = useState(initialData?.is_featured || false);
@@ -162,15 +178,32 @@ export default function PostForm({ initialData, postId }: PostFormProps) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Corpo do Artigo (Markdown/Texto)</label>
-                <textarea 
-                  required
-                  rows={16}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full text-sm px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono"
-                  placeholder="Escreva o conteúdo do seu artigo aqui..."
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-sm font-medium text-slate-700">Corpo do Artigo (Markdown/Texto)</label>
+                  <button 
+                    type="button" 
+                    onClick={() => setIsPreview(!isPreview)}
+                    className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-emerald-600 transition-colors"
+                  >
+                    {isPreview ? <><Edit3 className="w-3.5 h-3.5" /> Editar</> : <><Eye className="w-3.5 h-3.5" /> Preview</>}
+                  </button>
+                </div>
+                {isPreview ? (
+                  <div className="w-full h-[360px] overflow-y-auto px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 prose prose-sm sm:prose-base max-w-none prose-emerald">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {content || "*Nenhum conteúdo escrito ainda.*"}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <textarea 
+                    required
+                    rows={16}
+                    value={content as string}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="w-full text-sm px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono"
+                    placeholder="Escreva o conteúdo do seu artigo em Markdown..."
+                  />
+                )}
               </div>
             </div>
           </div>
