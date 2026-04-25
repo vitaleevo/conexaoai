@@ -1,0 +1,13 @@
+import django_filters
+
+from .models import Post
+
+
+class PostFilter(django_filters.FilterSet):
+    category = django_filters.CharFilter(field_name="category__slug")
+    tag = django_filters.CharFilter(field_name="tags__slug")
+    featured = django_filters.BooleanFilter()
+
+    class Meta:
+        model = Post
+        fields = ["category", "tag", "featured"]

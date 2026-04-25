@@ -1,0 +1,36 @@
+# Root project ignores
+.DS_Store
+Thumbs.db
+
+# Local env
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Backend artifacts
+backend/venv/
+backend/db.sqlite3
+backend/staticfiles/
+backend/media/
+backend/devserver.log
+backend/devserver.err.log
+
+# Frontend artifacts
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/devserver.log
+frontend/devserver.err.log
+frontend/.vercel/
+
+# IDE/tooling
+.idea/
+.vscode/
+opencode/
