@@ -2,6 +2,7 @@ import { TrendingUp, ArrowRight, Zap, Globe, Cpu } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { PostCard } from "@/components/blog/PostCard";
+import { FeaturedPost } from "@/components/blog/FeaturedPost";
 import { SearchForm } from "@/components/layout/SearchForm";
 import { NewsletterCTA } from "@/components/newsletter/NewsletterCTA";
 import { api } from "@/lib/api";
@@ -24,17 +25,17 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-border bg-background">
-        {/* Background Image with Overlay */}
+      <section className="relative overflow-hidden border-b border-border bg-slate-950 text-white">
+        {/* Background Image with Dark Overlay */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/hero_bg_abstract_ai_systems_1777165537122.png"
+            src="/hero-bg.jpg"
             alt="Conexão AI Background"
             fill
-            className="object-cover opacity-10 blur-[100px]"
+            className="object-cover opacity-70"
             priority
           />
-          <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/20 to-slate-950/90" />
         </div>
 
         <div className={`relative z-10 mx-auto grid w-full max-w-7xl gap-12 px-6 py-16 lg:py-24 ${
@@ -42,16 +43,16 @@ export default async function HomePage() {
         }`}>
           <div className="space-y-10">
             <div className="space-y-6 text-center lg:text-left">
-              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 lg:mx-0">
+              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 lg:mx-0">
                 <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
                   Intelligence for Global Operators
                 </span>
               </div>
-              <h1 className="font-display text-5xl leading-[0.95] text-foreground sm:text-7xl lg:text-8xl xl:text-9xl">
+              <h1 className="font-display text-4xl leading-[0.95] text-white sm:text-7xl lg:text-8xl xl:text-9xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
                 AI, Business <br className="hidden lg:block" />& Systems
               </h1>
-              <p className="mx-auto max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl sm:leading-9 lg:mx-0">
+              <p className="mx-auto max-w-2xl text-base leading-7 text-slate-300 sm:text-xl sm:leading-9 lg:mx-0">
                 Direct insights, structured analysis and dense guides for teams that need to move
                 fast without lowering their standards. Built for the modern operational elite.
               </p>
@@ -60,23 +61,23 @@ export default async function HomePage() {
             <div className="mx-auto max-w-2xl lg:mx-0">
               <SearchForm
                 buttonLabel="Read insights"
-                placeholder="Search AI, tools, growth, automation and systems..."
+                placeholder="Search AI, tools, growth, automation..."
                 variant="hero"
               />
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {homepageSignals.map((signal) => (
                 <div key={signal.title} className="group space-y-4">
-                  <div className="flex size-10 items-center justify-center rounded-xl border border-border bg-muted/50 transition group-hover:border-primary/50 group-hover:bg-primary/5">
-                    <signal.icon className="size-5 text-muted-foreground transition group-hover:text-primary" />
+                  <div className="flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition group-hover:border-primary/50 group-hover:bg-primary/10">
+                    <signal.icon className="size-5 text-slate-400 transition group-hover:text-primary" />
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-bold text-foreground">{signal.title}</p>
-                      <ArrowRight className="size-3 -translate-x-2 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100" />
+                      <p className="text-sm font-bold text-white transition-colors duration-500 ease-in-out hover:text-primary cursor-default">{signal.title}</p>
+                      <ArrowRight className="size-3 -translate-x-2 text-primary opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100" />
                     </div>
-                    <p className="text-sm leading-6 text-muted-foreground">{signal.description}</p>
+                    <p className="text-xs leading-6 text-slate-400 sm:text-sm">{signal.description}</p>
                   </div>
                 </div>
               ))}
@@ -84,7 +85,7 @@ export default async function HomePage() {
           </div>
 
           {featuredPost ? (
-            <div className="space-y-6 lg:border-l lg:border-border lg:pl-12">
+            <div className="space-y-6 lg:border-l lg:border-white/10 lg:pl-12">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="size-4 text-primary" />
@@ -92,11 +93,11 @@ export default async function HomePage() {
                     Featured story
                   </p>
                 </div>
-                <Link className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground transition hover:text-foreground" href="/blog">
+                <Link className="text-[10px] font-bold uppercase tracking-widest text-slate-400 transition-colors duration-500 ease-in-out hover:text-primary" href="/blog">
                   Browse all
                 </Link>
               </div>
-              <FeaturedPost post={featuredPost} />
+              <FeaturedPost post={featuredPost} isDark={true} />
             </div>
           ) : null}
         </div>
@@ -113,7 +114,7 @@ export default async function HomePage() {
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className="text-xs font-bold text-foreground/70 transition hover:text-primary"
+                className="text-xs font-bold text-foreground/70 transition-colors duration-500 ease-in-out hover:text-primary"
               >
                 {category.name}
               </Link>
@@ -126,20 +127,20 @@ export default async function HomePage() {
         <div className="mx-auto w-full max-w-7xl px-6 py-12">
           <div className="mb-6 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-              Editorial pillars
+              Knowledge Tracks
             </p>
-            <h2 className="font-display text-4xl leading-none text-foreground sm:text-5xl">
-              Built to be global, fast to scan and deep enough to trust.
+            <h2 className="font-display text-3xl leading-none text-foreground sm:text-5xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
+              Structured analysis for the modern operational elite.
             </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-            {categoryLinks.map((item) => (
+            {editorialPillars.map((item) => (
               <Link
                 key={item.href}
                 className="rounded-lg border border-border bg-card p-5 transition hover:border-[rgba(37,99,235,0.24)] hover:shadow-[0_14px_30px_rgba(15,23,42,0.05)]"
                 href={item.href}
               >
-                <p className="text-sm font-semibold text-foreground">{item.label}</p>
+                <p className="text-sm font-semibold text-foreground transition group-hover:text-primary">{item.label}</p>
                 <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.description}</p>
               </Link>
             ))}
@@ -156,7 +157,7 @@ export default async function HomePage() {
                 Latest Breakdown
               </p>
             </div>
-            <h2 className="font-display text-4xl leading-tight text-foreground sm:text-6xl">
+            <h2 className="font-display text-4xl leading-tight text-foreground sm:text-6xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
               Recent articles worth the scroll
             </h2>
             <p className="max-w-2xl text-base text-muted-foreground">
@@ -164,7 +165,7 @@ export default async function HomePage() {
             </p>
           </div>
           <Link 
-            className="group inline-flex items-center gap-2 text-sm font-bold text-foreground transition hover:text-primary" 
+            className="group inline-flex items-center gap-2 text-sm font-bold text-foreground transition-colors duration-500 ease-in-out hover:text-primary" 
             href="/blog"
           >
             View all articles

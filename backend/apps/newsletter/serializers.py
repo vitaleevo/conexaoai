@@ -6,7 +6,7 @@ from .models import Subscriber
 class SubscriberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscriber
-        fields = ["email", "name", "is_active", "subscribed_at", "confirmed"]
+        fields = ["email", "name", "region", "is_active", "subscribed_at", "confirmed"]
         read_only_fields = ["is_active", "subscribed_at", "confirmed"]
 
 

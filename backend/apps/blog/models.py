@@ -21,6 +21,8 @@ class Author(models.Model):
     avatar = models.ImageField(upload_to="authors/", blank=True)
     website = models.URLField(blank=True)
     twitter = models.CharField(max_length=50, blank=True)
+    linkedin = models.URLField(blank=True)
+    credentials = models.CharField(max_length=255, blank=True, help_text="Academic or professional credentials (e.g. PhD, Senior AI Architect)")
 
     def __str__(self):
         return self.user.get_full_name() or self.user.username
@@ -65,6 +67,12 @@ class Post(models.Model):
         ("published", "Published"),
         ("scheduled", "Scheduled"),
     ]
+    REGION_CHOICES = [
+        ("global", "Global"),
+        ("america", "America"),
+        ("europe", "Europe"),
+        ("asia", "Asia"),
+    ]
 
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, max_length=200, blank=True)
@@ -78,6 +86,7 @@ class Post(models.Model):
     )
     tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="draft")
+    region = models.CharField(max_length=10, choices=REGION_CHOICES, default="global")
     published_at = models.DateTimeField(null=True, blank=True)
     is_featured = models.BooleanField(default=False)
     reading_time = models.PositiveIntegerField(default=0, editable=False)
@@ -96,6 +105,7 @@ class Post(models.Model):
             models.Index(fields=["slug"]),
             models.Index(fields=["status", "published_at"]),
             models.Index(fields=["is_featured"]),
+            models.Index(fields=["region"]),
         ]
 
     def __str__(self):

@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend
 
-## Getting Started
+Frontend em Next.js 16 preparado para deploy no Cloudflare Workers com OpenNext.
 
-First, run the development server:
+## Desenvolvimento local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Preview no runtime do Cloudflare
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Crie `.dev.vars` a partir de `.dev.vars.example` se quiser forcar `NEXTJS_ENV=development`.
 
-## Learn More
+```bash
+npm run preview
+```
 
-To learn more about Next.js, take a look at the following resources:
+Esse comando compila o app com OpenNext e sobe um preview via Wrangler, mais proximo do runtime real de producao do que `next dev`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy com Cloudflare CLI
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Autentique o Wrangler:
 
-## Deploy on Vercel
+```bash
+npx wrangler login
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Defina as variaveis necessarias no projeto Cloudflare:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx wrangler secret put NEXT_PUBLIC_API_URL
+npx wrangler secret put NEXT_PUBLIC_SITE_URL
+npx wrangler secret put NEXT_PUBLIC_SITE_NAME
+npx wrangler secret put NEXT_PUBLIC_GA_ID
+```
+
+3. Gere os tipos opcionais do ambiente:
+
+```bash
+npm run cf-typegen
+```
+
+4. Faça o deploy:
+
+```bash
+npm run deploy
+```
+
+O worker usa a configuracao de `wrangler.jsonc` e publica o frontend em Cloudflare Workers.

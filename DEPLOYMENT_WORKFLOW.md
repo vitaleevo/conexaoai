@@ -6,9 +6,9 @@ The only valid deployment source is GitHub.
 
 - Frontend changes must be committed and pushed to GitHub.
 - Backend changes must be committed and pushed to GitHub.
-- Vercel must deploy from the GitHub-connected frontend project.
+- Cloudflare Workers must deploy the frontend from the validated GitHub revision.
 - Railway must deploy from the GitHub-connected backend project.
-- Do not use manual file edits in Vercel or Railway as a release process.
+- Do not use manual file edits in Cloudflare or Railway as a release process.
 - Do not use local-only changes as production changes.
 
 ## Required operational flow
@@ -20,7 +20,7 @@ The only valid deployment source is GitHub.
 5. Open a Pull Request to `main`.
 6. Wait for GitHub Actions to pass.
 7. Merge into `main`.
-8. Let Vercel and Railway deploy automatically from the new GitHub commit.
+8. Deploy the frontend with Cloudflare CLI from the validated commit and let Railway deploy the backend from GitHub.
 
 ## Local validation
 
@@ -31,6 +31,7 @@ cd frontend
 npm ci
 npm run lint
 npm run build
+npm run preview
 ```
 
 ### Backend
@@ -52,12 +53,12 @@ Configure these repository rules in GitHub:
 - Require the `CI` workflow to pass before merge.
 - Restrict direct pushes to `main`.
 
-## Vercel requirements
+## Cloudflare requirements
 
-- Import the frontend project from GitHub.
-- Set Production Branch to `main`.
-- Disable any manual workflow that bypasses GitHub as your release process.
-- Keep all production environment variables in Vercel project settings.
+- Authenticate with `wrangler login`.
+- Keep frontend runtime variables in Cloudflare Worker secrets/settings.
+- Use `npm run deploy` from `frontend` after the target commit is in GitHub.
+- Keep `wrangler.jsonc` versioned with the app.
 
 ## Railway requirements
 
@@ -73,5 +74,5 @@ Production is updated only after:
 - code exists in GitHub,
 - CI passes,
 - code is merged to `main`,
-- Vercel and Railway pick up that GitHub revision automatically.
-
+- Cloudflare deploy is run from that GitHub revision,
+- Railway picks up that GitHub revision automatically.

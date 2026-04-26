@@ -1,223 +1,84 @@
-# Conexao AI — Setup & Deploy Guide
+# Conexao AI — Guia de Deploy (Vercel & Railway)
 
-## Pré-requisitos
-
-- Python 3.12+
-- Node.js 20+
-- Git
+Este guia descreve como colocar o projeto Conexão AI online usando **Vercel** para o frontend e **Railway** para o backend.
 
 ---
 
-## 1. Backend — Django
+## 1. Preparação do GitHub
 
-```bash
-# Clonar e criar ambiente virtual
-git clone https://github.com/seu-usuario/conexao-ai-backend.git
-cd conexao-ai-backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-
-# Instalar dependências
-pip install -r requirements.txt
-
-# Configurar variáveis de ambiente
-cp .env.example .env
-# Edite .env com seus valores
-
-# Banco de dados e superusuário
-python manage.py migrate
-python manage.py createsuperuser
-
-# Rodar servidor de desenvolvimento
-python manage.py runserver
-# Acesse: http://localhost:8000/admin
-# API:    http://localhost:8000/api
-```
+1. Certifique-se de que todas as alterações foram commitadas:
+   ```bash
+   git add .
+   git commit -m "chore: preparar para deploy (Vercel & Railway)"
+   git push origin main
+   ```
+2. O repositório deve estar público ou privado, mas acessível pelas plataformas.
 
 ---
 
-## 2. Frontend — Next.js
+## 2. Backend — Railway
 
-```bash
-git clone https://github.com/seu-usuario/conexao-ai-frontend.git
-cd conexao-ai-frontend
-npm install
+O Railway hospedará o Django e o banco de dados PostgreSQL.
 
-# Configurar variáveis de ambiente
-cp .env.local.example .env.local
-# Edite: NEXT_PUBLIC_API_URL=http://localhost:8000/api
+1. **Criar Novo Projeto**: No Railway, clique em "New Project" > "Deploy from GitHub repo".
+2. **Selecionar Repositório**: Escolha `holyconexao/conexaoai`.
+3. **Configurar Root Directory**:
+   - Vá em **Settings** > **General**.
+   - Defina **Root Directory** como `backend`.
+4. **Adicionar PostgreSQL**: No projeto, clique em "New" > "Database" > "Add PostgreSQL".
+5. **Variáveis de Ambiente (Variables)**:
+   Adicione as seguintes chaves no painel do Railway:
+   | Variável | Valor Sugerido |
+   |---|---|
+   | `DJANGO_SETTINGS_MODULE` | `config.settings.production` |
+   | `SECRET_KEY` | (Gere uma chave segura) |
+   | `DEBUG` | `False` |
+   | `ALLOWED_HOSTS` | `*` (ou o domínio que o Railway gerar) |
+   | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (Automático) |
+   | `CORS_ALLOWED_ORIGINS` | `https://conexaoai.vercel.app` (URL do seu frontend) |
+   | `CSRF_TRUSTED_ORIGINS` | `https://conexaoai.vercel.app` |
+   | `CLOUDINARY_CLOUD_NAME` | (Sua conta Cloudinary) |
+   | `CLOUDINARY_API_KEY` | (Sua conta Cloudinary) |
+   | `CLOUDINARY_API_SECRET` | (Sua conta Cloudinary) |
 
-# Rodar servidor de desenvolvimento
-npm run dev
-# Acesse: http://localhost:3000
-```
-
----
-
-## 3. Deploy — Backend no Railway
-
-```bash
-# 1. Crie conta em railway.app
-# 2. Conecte seu repositório GitHub
-# 3. Configure a branch de produção como `main`
-# 3. Adicione as variáveis de ambiente no painel do Railway:
-
-SECRET_KEY=sua-chave-secreta
-DEBUG=False
-ALLOWED_HOSTS=sua-api.railway.app
-DATABASE_URL=postgresql://...    # Railway provisiona automaticamente
-CLOUDINARY_CLOUD_NAME=...
-CLOUDINARY_API_KEY=...
-CLOUDINARY_API_SECRET=...
-CORS_ALLOWED_ORIGINS=https://conexao.ai
-
-# 4. Railway detecta o Dockerfile e faz deploy automático a cada push/merge no GitHub
-# 5. O startCommand no railway.toml roda as migrations automaticamente
-# 6. Não use deploy manual como processo principal; a origem da release deve ser o commit no GitHub
-```
+6. **Deploy**: O Railway detectará o `backend/railway.toml` e o `backend/Dockerfile` e iniciará o build.
 
 ---
 
-## 4. Deploy — Frontend na Vercel
+## 3. Frontend — Vercel
 
-```bash
-# 1. Crie conta em vercel.com
-# 2. Importe o repositório do frontend
-# 3. Configure Production Branch = `main`
-# 3. Adicione as variáveis de ambiente no painel da Vercel:
+A Vercel hospedará o Next.js.
 
-NEXT_PUBLIC_API_URL=https://sua-api.railway.app/api
-NEXT_PUBLIC_SITE_URL=https://conexao.ai
-NEXT_PUBLIC_SITE_NAME=Conexao AI
+1. **Importar Projeto**: No dashboard da Vercel, clique em "Add New" > "Project".
+2. **Selecionar Repositório**: Escolha `holyconexao/conexaoai`.
+3. **Configurar Root Directory**:
+   - No campo **Root Directory**, selecione `frontend`.
+4. **Variáveis de Ambiente**:
+   Adicione estas variáveis no painel da Vercel:
+   | Variável | Valor |
+   |---|---|
+   | `NEXT_PUBLIC_API_URL` | `https://sua-api.railway.app/api` |
+   | `NEXT_PUBLIC_SITE_URL` | `https://conexao.ai` |
+   | `NEXT_PUBLIC_SITE_NAME` | `Conexão AI` |
 
-# 4. Vercel detecta Next.js e configura tudo automaticamente
-# 5. Cada merge em `main` no GitHub deve gerar um deploy automático
-# 6. Deploy disponível em: https://conexao.ai
-```
-
----
-
-## 5. Domínio Custom
-
-```
-# Vercel:
-# Settings > Domains > Add "conexao.ai"
-# Configure DNS: A record → 76.76.21.21
-
-# Railway:
-# Settings > Domains > Add "api.conexao.ai"
-# Configure DNS: CNAME → sua-app.railway.app
-
-# Resultado:
-# https://conexao.ai          → Frontend (Vercel)
-# https://api.conexao.ai/api  → Backend (Railway)
-```
+5. **Deploy**: Clique em "Deploy".
 
 ---
 
-## 6. Primeiro Conteúdo
+## 4. Checklist Pós-Deploy
 
-```bash
-# 1. Acesse o admin Django
-# http://localhost:8000/admin (ou sua URL de produção)
-
-# 2. Crie categorias primeiro:
-# Admin > Blog > Categories > Add Category
-# Sugestão: "Ferramentas de IA", "Automação", "Ganhar Dinheiro", "Prompts"
-
-# 3. Crie seu perfil de Author:
-# Admin > Blog > Authors > Add Author
-
-# 4. Publique seu primeiro post:
-# Admin > Blog > Posts > Add Post
-# Preencha: title, content, excerpt, category, tags, status=published
-
-# 5. Verifique a API:
-# http://localhost:8000/api/posts/
-# http://localhost:8000/api/categories/
-```
+- [ ] **Migrations**: Verifique se as tabelas foram criadas no Postgres (o comando de migrate está no Dockerfile).
+- [ ] **Superuser**: No Railway, você pode abrir o terminal da máquina e rodar:
+  ```bash
+  python manage.py createsuperuser
+  ```
+- [ ] **Domínios**: Se tiver domínios próprios (ex: `conexao.ai`), configure o DNS na Vercel e o CNAME da API no Railway.
+- [ ] **HTTPS**: Ambas as plataformas fornecem SSL automático.
 
 ---
 
-## 7. Configurar DJANGO_SETTINGS_MODULE
+## Endpoints Úteis
 
-```bash
-# Para usar o split de settings, configure no .env ou no Dockerfile:
-
-# Desenvolvimento:
-export DJANGO_SETTINGS_MODULE=config.settings.development
-
-# Produção:
-export DJANGO_SETTINGS_MODULE=config.settings.production
-```
-
----
-
-## Checklist de Go-Live
-
-- [ ] Repositório conectado ao GitHub
-- [ ] Branch `main` protegida no GitHub
-- [ ] Pull Requests obrigatórios antes de merge
-- [ ] GitHub Actions obrigatórias antes de merge
-- [ ] `SECRET_KEY` forte e único em produção
-- [ ] `DEBUG=False` em produção
-- [ ] PostgreSQL configurado e migrations rodadas
-- [ ] Cloudinary configurado para media em produção
-- [ ] CORS configurado para aceitar apenas o domínio do frontend
-- [ ] HTTPS ativo (Railway e Vercel fazem isso automaticamente)
-- [ ] Domínio custom configurado
-- [ ] Vercel a fazer deploy automático a partir da branch `main`
-- [ ] Railway a fazer deploy automático a partir da branch `main`
-- [ ] Google Search Console verificado com sitemap submetido
-- [ ] Google Analytics configurado
-- [ ] Primeiro post publicado
-- [ ] Newsletter CTA funcionando
-- [ ] Teste de velocidade no PageSpeed Insights (meta: 90+ mobile)
-
----
-
-## Comandos Úteis
-
-```bash
-# Backup do banco de dados
-python manage.py dumpdata --natural-foreign --natural-primary > backup.json
-
-# Restaurar backup
-python manage.py loaddata backup.json
-
-# Criar migration após alterar models
-python manage.py makemigrations
-python manage.py migrate
-
-# Shell interativo com Django
-python manage.py shell
-
-# Criar superusuário adicional
-python manage.py createsuperuser
-
-# Build estático do Next.js
-npm run build
-npm run start
-
-# Verificar bundle size
-npm run build -- --analyze
-```
-
----
-
-## Endpoints da API — Referência
-
-| Método | Endpoint | Descrição |
-|---|---|---|
-| GET | `/api/posts/` | Lista de posts publicados |
-| GET | `/api/posts/?is_featured=true` | Posts em destaque |
-| GET | `/api/posts/?category__slug=ia` | Posts por categoria |
-| GET | `/api/posts/?search=chatgpt` | Busca em posts |
-| GET | `/api/posts/slugs/` | Todos os slugs (para SSG) |
-| GET | `/api/posts/{slug}/` | Post por slug |
-| GET | `/api/posts/{slug}/related/` | Posts relacionados |
-| GET | `/api/categories/` | Lista de categorias |
-| GET | `/api/tags/` | Lista de tags |
-| POST | `/api/newsletter/subscribe/` | Inscrever no newsletter |
-| POST | `/api/auth/token/` | Obter JWT token |
-| POST | `/api/auth/token/refresh/` | Renovar JWT token |
+- **Admin**: `https://sua-api.railway.app/admin/`
+- **API Docs**: `https://sua-api.railway.app/api/`
+- **Site**: `https://conexao.ai` (ou sua URL da Vercel)

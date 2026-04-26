@@ -1,0 +1,11 @@
+name = "conexao-edge-handler"
+main = "src/index.ts"
+compatibility_date = "2024-04-03"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "conexao-ai-db"
+database_id = "35318f43-5b4b-43a3-b912-76a24a85e2f2"
+
+[observability]
+enabled = true

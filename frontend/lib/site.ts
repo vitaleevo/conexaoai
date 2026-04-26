@@ -1,3 +1,5 @@
+import { Zap, Globe, Cpu } from "lucide-react";
+
 export const primaryNav = [
   { href: "/search?q=ai", label: "AI" },
   { href: "/search?q=business", label: "Business" },
@@ -8,43 +10,46 @@ export const primaryNav = [
 
 export const editorialPillars = [
   {
-    href: "/search?q=ai",
-    label: "AI",
-    description: "Tools, agents and practical workflows for real operating teams.",
+    href: "/search?q=ai+agents",
+    label: "AI Agents",
+    description: "Architecting and deploying autonomous agents for real business value.",
   },
   {
-    href: "/search?q=business",
-    label: "Business",
-    description: "Growth, monetization and business models shaped by AI leverage.",
+    href: "/search?q=saas",
+    label: "SaaS Ops",
+    description: "Systems for building, running and scaling lean software operations.",
   },
   {
-    href: "/search?q=tools",
-    label: "Tools",
-    description: "Clear comparisons, stack decisions and software that earns its place.",
+    href: "/search?q=growth",
+    label: "Growth",
+    description: "Modern distribution, monetization and revenue systems for the AI era.",
   },
   {
     href: "/search?q=automation",
     label: "Automation",
-    description: "Systems that reduce repeated work and improve execution quality.",
+    description: "Practical logic to replace manual workflows and increase team velocity.",
   },
   {
     href: "/search?q=guides",
     label: "Guides",
-    description: "Dense, complete walkthroughs built to be used and bookmarked.",
+    description: "Dense technical walkthroughs and blueprints for global operators.",
   },
 ];
 
 export const homepageSignals = [
   {
-    title: "American clarity",
-    description: "Fast to scan, direct to the point, built for immediate understanding.",
+    title: "AI Implementation",
+    description: "Real-world workflows from complex prompts to automated production systems.",
+    icon: Zap,
   },
   {
-    title: "European depth",
-    description: "Structured thinking, credible arguments and professional presentation.",
+    title: "Business Leverage",
+    description: "Monetization models and scaling strategies for the modern internet economy.",
+    icon: Globe,
   },
   {
-    title: "Indian density",
-    description: "High-value guides with more insight packed into every article.",
+    title: "Systems & Tools",
+    description: "Stack decisions and automation playbooks that multiply your team's output.",
+    icon: Cpu,
   },
 ];

@@ -1,24 +1,10 @@
 import type { Metadata } from "next";
-import { Manrope, Newsreader, Geist } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  variable: "--font-newsreader",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -33,22 +19,33 @@ export const metadata: Metadata = {
     shortcut: ["/brand/logo-mark.png"],
     apple: ["/brand/logo-full.png"],
   },
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/",
+      "en-GB": "/",
+      "en-SG": "/",
+      "x-default": "/",
+    },
+  },
   openGraph: {
     siteName: "Conexao AI",
     type: "website",
-    locale: "pt_BR",
+    locale: "en_US",
     images: [
       {
         url: "/og-default.png",
-        width: 731,
-        height: 499,
-        alt: "Conexao AI",
+        width: 1200,
+        height: 630,
+        alt: "Conexao AI — Intelligence for Global Operators",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     images: ["/og-default.png"],
+    title: "Conexao AI — Intelligence for Global Operators",
+    description: "Direct insights, structured analysis and dense guides for the modern operational elite.",
   },
   robots: { index: true, follow: true },
 };
@@ -67,18 +64,20 @@ const websiteSchema = {
 };
 
 import { BehavioralTracker } from "@/components/analytics/BehavioralTracker";
+import { MobileNav } from "@/components/layout/MobileNav";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
-      <body className={`${manrope.variable} ${newsreader.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="font-sans">
+      <body suppressHydrationWarning>
         <BehavioralTracker />
         <JsonLd data={websiteSchema} />
         <TooltipProvider>
           <div className="flex min-h-screen flex-col bg-background">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 pb-16 md:pb-0">{children}</main>
             <Footer />
+            <MobileNav />
           </div>
         </TooltipProvider>
       </body>

@@ -1,12 +1,23 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-
+import { redirect } from "next/navigation";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { PostCard } from "@/components/blog/PostCard";
 import { SearchForm } from "@/components/layout/SearchForm";
-import { absoluteUrl } from "@/lib/utils";
+import { Pagination } from "@/components/layout/Pagination";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const PAGE_SIZE = 12;
 
 export async function generateMetadata({
   searchParams,
@@ -17,82 +28,82 @@ export async function generateMetadata({
   const query = q.trim();
 
   return {
-    title: query ? `Busca: ${query}` : "Buscar",
-    description: query
-      ? `Resultados de busca por ${query} no Conexao AI.`
-      : "Busque artigos sobre IA, automação, sistemas digitais e monetização.",
-    alternates: {
-      canonical: query ? absoluteUrl(`/search?q=${encodeURIComponent(query)}`) : absoluteUrl("/search"),
-    },
-    robots: {
-      index: false,
-      follow: true,
-    },
+    title: query ? `Search: ${query}` : "Search",
+    description: "Search for AI insights and analysis on the Conexão AI blog.",
   };
 }
 
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 }) {
-  const { q = "" } = await searchParams;
-  const query = q.trim();
-  const results = query
-    ? await api.posts
-        .list(`search=${encodeURIComponent(query)}&page_size=12`, { revalidate: 0 })
-        .catch(() => ({
-        count: 0,
-        next: null,
-        previous: null,
-        results: [],
-      }))
-    : { count: 0, next: null, previous: null, results: [] };
+  const { q, page = "1" } = await searchParams;
+  const currentPage = parseInt(page, 10) || 1;
+
+  if (!q) {
+    redirect("/blog");
+  }
+
+  const posts = await api.posts
+    .list(`search=${encodeURIComponent(q)}&page=${currentPage}&page_size=${PAGE_SIZE}`)
+    .catch(() => ({ count: 0, results: [] }) as any);
+
+  const totalPages = Math.ceil(posts.count / PAGE_SIZE);
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12">
-      <section className="max-w-3xl space-y-4">
-        <p className="text-sm uppercase tracking-[0.16em] text-primary">Search</p>
-        <h1 className="font-display text-5xl leading-[0.98]">Find content by topic and intent.</h1>
-        <p className="text-lg leading-8 text-muted-foreground">
-          Search across AI, business systems, tools, monetization, guides and operating playbooks.
-        </p>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/blog">Blog</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Search</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      
+      <section className="space-y-6">
+        <div className="space-y-2">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">Results</p>
+          <h1 className="font-display text-4xl leading-tight text-foreground sm:text-5xl">
+            Search results for &quot;{q}&quot;
+          </h1>
+        </div>
+        <SearchForm defaultValue={q} buttonLabel="Search again" variant="page" />
       </section>
 
-      <SearchForm
-        buttonLabel="Search"
-        defaultValue={query}
-        placeholder="Try: chatgpt, automation, affiliates, prompts..."
-        variant="page"
-      />
+      <Separator />
 
-      {query ? (
-        <section className="space-y-6">
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="text-2xl font-semibold">
-              {results.count} result{results.count === 1 ? "" : "s"} for &quot;{query}&quot;
-            </h2>
-            <Link className="text-sm font-semibold text-primary" href="/blog">
-              View all articles
-            </Link>
-          </div>
-          {results.results.length ? (
+      <section className="space-y-12">
+        {posts.results && posts.results.length ? (
+          <>
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {results.results.map((post) => (
+              {posts.results.map((post: any) => (
                 <PostCard key={post.id} post={post} />
               ))}
             </div>
-          ) : (
-            <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
-              No article matched this search. Try a broader term or browse the main archive.
-            </div>
-          )}
-        </section>
-      ) : (
-        <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
-          Type a term to search the published content.
-        </div>
-      )}
+
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              baseUrl={`/search?q=${encodeURIComponent(q)}`}
+            />
+          </>
+        ) : (
+          <div className="rounded-lg border border-border bg-background p-10 text-center">
+            <p className="text-lg text-muted-foreground">
+              We couldn&apos;t find any articles matching your search. Try different terms or browse the main archive.
+            </p>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

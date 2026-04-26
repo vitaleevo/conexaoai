@@ -12,11 +12,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PostCard } from "@/components/blog/PostCard";
+import { Pagination } from "@/components/layout/Pagination";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { api } from "@/lib/api";
 import { absoluteUrl } from "@/lib/utils";
 
-export const revalidate = 60;
+export const revalidate = 3600;
+
+const PAGE_SIZE = 12;
 
 export async function generateStaticParams() {
   const categories = await api.categories.list().catch(() => []);
@@ -51,17 +54,24 @@ export async function generateMetadata({
 
 export default async function CategoryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { slug } = await params;
+  const { page = "1" } = await searchParams;
+  const currentPage = parseInt(page, 10) || 1;
+
   const [categories, posts] = await Promise.all([
     api.categories.list().catch(() => []),
-    api.categories.bySlug(slug).catch(() => null),
+    api.categories.bySlug(slug, `page=${currentPage}&page_size=${PAGE_SIZE}`).catch(() => null),
   ]);
   const category = categories.find((item) => item.slug === slug);
 
   if (!category || !posts) notFound();
+
+  const totalPages = Math.ceil(posts.count / PAGE_SIZE);
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -70,7 +80,7 @@ export default async function CategoryPage({
       {
         "@type": "ListItem",
         position: 1,
-        name: "Inicio",
+        name: "Home",
         item: absoluteUrl("/"),
       },
       {
@@ -94,7 +104,7 @@ export default async function CategoryPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -108,16 +118,24 @@ export default async function CategoryPage({
       </Breadcrumb>
       <section className="max-w-3xl space-y-4">
         <Badge variant="secondary" className="uppercase tracking-[0.16em]">
-          Categoria
+          Category
         </Badge>
         <h1 className="font-display text-5xl leading-[0.98] text-foreground">{category.name}</h1>
         <p className="text-lg leading-8 text-muted-foreground">{category.description}</p>
       </section>
       <Separator />
-      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {posts.results.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+      <section className="space-y-12">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {posts.results.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          baseUrl={`/category/${slug}`}
+        />
       </section>
     </div>
   );

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS subscribers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT,
+    region TEXT,
+    country TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

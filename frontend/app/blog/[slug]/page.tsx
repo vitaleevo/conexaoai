@@ -23,6 +23,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { api } from "@/lib/api";
 import { absoluteUrl, buildArticleContentModel, extractFaqFromHtml } from "@/lib/utils";
 
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const slugs = await api.posts.slugs().catch(() => []);
   return slugs.map(({ slug }) => ({ slug }));
@@ -92,6 +94,12 @@ export default async function PostPage({
       "@type": "Person",
       name: post.author.name,
       url: post.author.website,
+      jobTitle: post.author.credentials,
+      sameAs: [
+        post.author.twitter ? `https://twitter.com/${post.author.twitter}` : null,
+        post.author.linkedin,
+        post.author.website,
+      ].filter(Boolean),
     },
     image: post.featured_image,
     publisher: {
@@ -129,7 +137,7 @@ export default async function PostPage({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -163,11 +171,11 @@ export default async function PostPage({
               ) : null}
               <span className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Article</span>
             </div>
-            <h1 className="font-display text-5xl leading-[0.95] text-foreground sm:text-6xl">
+            <h1 className="font-display text-4xl leading-[0.95] text-foreground sm:text-6xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
               {post.title}
             </h1>
             {post.excerpt ? (
-              <p className="max-w-3xl text-xl leading-9 text-[var(--muted)]">{post.excerpt}</p>
+              <p className="max-w-3xl text-xl leading-9 text-muted-foreground">{post.excerpt}</p>
             ) : null}
             <PostMeta post={post} />
           </div>

@@ -31,7 +31,7 @@ export default function CmsLoginPage() {
 
       if (!res.ok) throw new Error("Credenciais inválidas");
 
-      const data = await res.json();
+      const data = (await res.json()) as { access: string; refresh: string };
       setCmsTokens(data.access, data.refresh);
       router.push("/cms");
     } catch (err: unknown) {

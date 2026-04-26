@@ -1,21 +1,42 @@
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 import { PostCard } from "@/components/blog/PostCard";
 import { SearchForm } from "@/components/layout/SearchForm";
+import { Pagination } from "@/components/layout/Pagination";
 import { api } from "@/lib/api";
 import { editorialPillars } from "@/lib/site";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
-export default async function BlogPage() {
+const PAGE_SIZE = 12;
+
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page = "1" } = await searchParams;
+  const currentPage = parseInt(page, 10) || 1;
+
   const [posts, categories] = await Promise.all([
     api.posts
-      .list("page_size=12")
+      .list(`page=${currentPage}&page_size=${PAGE_SIZE}`)
       .catch(
         () => ({ count: 0, next: null, previous: null, results: [] }) as Awaited<ReturnType<typeof api.posts.list>>,
       ),
     api.categories.list().catch(() => []),
   ]);
+
+  const totalPages = Math.ceil(posts.count / PAGE_SIZE);
+
   const topicLinks = categories.length
     ? categories.slice(0, 5).map((category) => ({
         href: `/category/${category.slug}`,
@@ -25,16 +46,27 @@ export default async function BlogPage() {
 
   return (
     <>
-      <section className="border-b border-[var(--line)] bg-white">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-14">
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-6 py-10 lg:py-14">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Blog</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           <div className="max-w-4xl space-y-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-strong)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
               Blog
             </p>
-            <h1 className="font-display text-5xl leading-[0.96] text-[var(--foreground)] sm:text-6xl">
+            <h1 className="font-display text-5xl leading-[0.96] text-foreground sm:text-6xl">
               Clear editorial structure for people building with AI.
             </h1>
-            <p className="max-w-3xl text-lg leading-8 text-[var(--muted)]">
+            <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
               Every post is designed to be easy to scan in five seconds, then rich enough to keep
               serious readers engaged to the end.
             </p>
@@ -44,7 +76,7 @@ export default async function BlogPage() {
             {topicLinks.map((item) => (
               <Link
                 key={item.href}
-                className="rounded-full border border-[var(--line)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--muted)] transition hover:border-[var(--accent)] hover:bg-white hover:text-[var(--foreground)]"
+                className="rounded-full border border-border bg-muted px-4 py-2 text-sm font-medium text-muted-foreground transition hover:border-primary hover:bg-background hover:text-foreground"
                 href={item.href}
               >
                 {item.label}
@@ -56,13 +88,22 @@ export default async function BlogPage() {
 
       <section className="mx-auto w-full max-w-7xl px-6 py-12">
         {posts.results.length ? (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {posts.results.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {posts.results.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+            
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              baseUrl="/blog"
+              className="mt-12"
+            />
+          </>
         ) : (
-          <div className="rounded-lg border border-[var(--line)] bg-white p-6 text-sm leading-7 text-[var(--muted)]">
+          <div className="rounded-lg border border-border bg-background p-6 text-sm leading-7 text-muted-foreground">
             No published posts yet. Once content is live, this page becomes the primary editorial
             archive.
           </div>

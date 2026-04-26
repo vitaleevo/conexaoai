@@ -7,7 +7,7 @@
 | Layer | Tech | Deployment |
 |-------|------|------------|
 | **Backend** (API + CMS) | Django 5.2, DRF, PostgreSQL, Cloudinary | [Railway](https://railway.app) |
-| **Frontend** (Blog + CMS UI) | Next.js 16, React 19, Tailwind CSS 4 | [Vercel](https://vercel.com) |
+| **Frontend** (Blog + CMS UI) | Next.js 16, React 19, Tailwind CSS 4 | [Cloudflare Workers](https://developers.cloudflare.com/workers/) |
 | **Media** | Cloudinary CDN | Cloudinary |
 
 ```
@@ -87,15 +87,17 @@ Open [http://localhost:3000](http://localhost:3000) for the blog and [http://loc
 4. Add a PostgreSQL plugin — `DATABASE_URL` will be auto-injected
 5. Deploy — Railway will use the `Dockerfile` automatically
 
-### Vercel (Frontend)
+### Cloudflare Workers (Frontend)
 
-1. Connect the repo to Vercel
-2. Set **Root Directory** to `frontend`
-3. Set **Framework Preset** to `Next.js`
-4. Add environment variables:
-   - `NEXT_PUBLIC_API_URL` → your Railway backend URL + `/api`
-   - `NEXT_PUBLIC_SITE_URL` → your Vercel production URL
-5. Deploy
+1. `cd frontend`
+2. Run `npx wrangler login`
+3. Set the required Worker secrets:
+   - `NEXT_PUBLIC_API_URL`
+   - `NEXT_PUBLIC_SITE_URL`
+   - `NEXT_PUBLIC_SITE_NAME`
+   - `NEXT_PUBLIC_GA_ID`
+4. Validate with `npm run preview`
+5. Deploy with `npm run deploy`
 
 ## License
 

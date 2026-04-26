@@ -31,13 +31,13 @@ export function NewsletterCTA() {
             
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                className="inline-flex h-14 items-center justify-center rounded-xl bg-primary px-8 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90 active:scale-[0.98]"
+                className="inline-flex h-12 sm:h-14 items-center justify-center rounded-xl bg-primary px-6 sm:px-8 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90 active:scale-[0.98]"
                 href="/newsletter"
               >
                 Join the newsletter
               </Link>
               <Link
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-xl border border-border bg-background px-8 text-sm font-bold text-foreground transition hover:bg-muted active:scale-[0.98]"
+                className="group inline-flex h-12 sm:h-14 items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 sm:px-8 text-sm font-bold text-foreground transition hover:bg-muted active:scale-[0.98]"
                 href="/blog"
               >
                 Browse samples

@@ -1,6 +1,8 @@
 import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
+type CmsRefreshResponse = { access: string };
+type ApiErrorResponse = { detail?: string; [key: string]: unknown };
 
 export function getCmsToken() {
   return Cookies.get("cms_access_token");
@@ -53,7 +55,7 @@ export async function cmsFetch<T>(
         body: JSON.stringify({ refresh: refreshToken }),
       });
       if (refreshRes.ok) {
-        const { access } = await refreshRes.json();
+        const { access } = (await refreshRes.json()) as CmsRefreshResponse;
         const cookieOptions = { secure: process.env.NODE_ENV === "production", sameSite: "strict" as const };
         Cookies.set("cms_access_token", access, { expires: 1 / 24, ...cookieOptions });
         headers["Authorization"] = `Bearer ${access}`;
@@ -74,7 +76,7 @@ export async function cmsFetch<T>(
   if (!response.ok) {
     let errorMessage = `API Error ${response.status}`;
     try {
-      const errorData = await response.json();
+      const errorData = (await response.json()) as ApiErrorResponse;
       errorMessage = errorData.detail || JSON.stringify(errorData);
     } catch {
       // Ignored
@@ -87,5 +89,5 @@ export async function cmsFetch<T>(
     return {} as T;
   }
 
-  return response.json();
+  return (await response.json()) as T;
 }

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Manrope:wght@200..800&family=Newsreader:opsz,wght@6..72,200..800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -15,13 +16,16 @@
   --accent: oklch(0.97 0 0);
   --accent-strong: #1d4ed8;
   --highlight: #f97316;
+  --font-sans: "Geist", "Manrope", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
+  --font-newsreader: "Newsreader", serif;
   --header-height: 80px;
   --radius-premium: 1.25rem;
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.546 0.245 262.881);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -29,7 +33,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: oklch(0.546 0.245 262.881);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -38,8 +42,8 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
@@ -141,8 +145,13 @@ img {
 .prose-content a {
   color: var(--primary);
   text-decoration: underline;
-  text-decoration-color: rgba(37, 99, 235, 0.28);
-  text-underline-offset: 0.18em;
+  text-underline-offset: 4px;
+  transition: color 500ms ease-in-out;
+}
+
+.prose-content a:hover {
+  opacity: 0.8;
+  color: var(--primary);
 }
 
 .prose-content blockquote {

@@ -17,13 +17,13 @@ Build a high-performance, SEO-optimized, scalable blog and content platform focu
 | Layer | Technology |
 |---|---|
 | Backend | Django 5 + Django REST Framework |
-| Frontend | Next.js 15 (App Router) |
+| Frontend | Next.js 16 (App Router) |
 | Database | SQLite (dev) → PostgreSQL (prod) |
 | Media | Cloudinary |
 | Auth | JWT via SimpleJWT |
 | Hosting (backend) | Railway or Render |
-| Hosting (frontend) | Vercel |
-| CDN | Vercel Edge + Cloudflare |
+| Hosting (frontend) | Cloudflare Workers |
+| CDN | Cloudflare |
 
 ---
 
@@ -32,12 +32,12 @@ Build a high-performance, SEO-optimized, scalable blog and content platform focu
 ```
 ┌─────────────────────────────────────────────────────┐
 │              CDN / Edge Layer                        │
-│         Vercel Edge + Cloudflare                     │
+│                 Cloudflare                           │
 │   Static Assets │ Edge Caching │ DDoS Protection     │
 └───────────────────────┬─────────────────────────────┘
                         │
 ┌───────────────────────▼─────────────────────────────┐
-│           Frontend Layer — Next.js 15 (Vercel)       │
+│     Frontend Layer — Next.js 16 (Cloudflare)         │
 │     SSG Pages │ ISR Pages │ SSR Pages                │
 │  Blog posts   │  Home/Listing │  Search              │
 └───────────────────────┬─────────────────────────────┘
@@ -88,7 +88,7 @@ Build a high-performance, SEO-optimized, scalable blog and content platform focu
 
 ### Phase 1 — Launch (0–10k visitors/mo)
 - Django + SQLite → PostgreSQL on Railway
-- Next.js on Vercel hobby plan
+- Next.js on Cloudflare Workers
 - Cloudinary free tier for media
 - Django Admin as full CMS
 

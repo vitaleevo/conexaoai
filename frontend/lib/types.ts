@@ -5,6 +5,8 @@ export interface Author {
   avatar: string;
   website: string;
   twitter: string;
+  linkedin: string;
+  credentials: string;
 }
 
 export interface Category {
@@ -38,6 +40,7 @@ export interface Post {
   published_at: string;
   reading_time: number;
   is_featured: boolean;
+  region: "global" | "america" | "europe" | "asia";
   meta_title: string;
   meta_description: string;
   keywords: string;
@@ -56,11 +59,13 @@ export interface PaginatedResponse<T> {
 export interface SubscriberPayload {
   email: string;
   name?: string;
+  region?: string;
 }
 
 export interface SubscriberResponse {
   email: string;
   name?: string;
+  region: string;
   is_active: boolean;
   subscribed_at: string;
   confirmed: boolean;

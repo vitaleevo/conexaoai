@@ -9,7 +9,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ["name", "email", "bio", "avatar", "website", "twitter"]
+        fields = ["name", "email", "bio", "avatar", "website", "twitter", "linkedin", "credentials"]
 
 
 class CategorySerializer(serializers.ModelSerializer):

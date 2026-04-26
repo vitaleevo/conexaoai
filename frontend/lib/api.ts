@@ -40,20 +40,23 @@ export const api = {
   },
   categories: {
     list: () => apiFetch<Category[]>("/categories/"),
-    bySlug: (slug: string) =>
-      apiFetch<PaginatedResponse<Post>>(`/posts/?category__slug=${slug}`),
+    bySlug: (slug: string, params = "") =>
+      apiFetch<PaginatedResponse<Post>>(`/posts/?category__slug=${slug}${params ? `&${params}` : ""}`),
   },
   tags: {
     list: () => apiFetch<Tag[]>("/tags/"),
-    bySlug: (slug: string) =>
-      apiFetch<PaginatedResponse<Post>>(`/posts/?tags__slug=${slug}`),
+    bySlug: (slug: string, params = "") =>
+      apiFetch<PaginatedResponse<Post>>(`/posts/?tags__slug=${slug}${params ? `&${params}` : ""}`),
   },
   newsletter: {
-    subscribe: (data: { email: string; name?: string }) =>
-      apiFetch<SubscriberResponse>("/newsletter/subscribe/", {
+    subscribe: (data: { email: string; name?: string; region?: string }) =>
+      fetch(process.env.NEXT_PUBLIC_NEWSLETTER_WORKER_URL || "", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-        revalidate: 0,
+      }).then((res) => {
+        if (!res.ok) throw new Error("Subscription failed");
+        return res.json() as Promise<SubscriberResponse>;
       }),
   },
 };
