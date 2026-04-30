@@ -50,13 +50,10 @@ export const api = {
   },
   newsletter: {
     subscribe: (data: { email: string; name?: string; region?: string }) =>
-      fetch(process.env.NEXT_PUBLIC_NEWSLETTER_WORKER_URL || "", {
+      apiFetch<SubscriberResponse>("/newsletter/subscribe/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      }).then((res) => {
-        if (!res.ok) throw new Error("Subscription failed");
-        return res.json() as Promise<SubscriberResponse>;
+        revalidate: 0,
       }),
   },
 };

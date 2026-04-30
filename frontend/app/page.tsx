@@ -46,22 +46,26 @@ export default async function HomePage() {
               <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 lg:mx-0">
                 <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                  Intelligence for Global Operators
+                  Inteligência para Operadores Globais
+
                 </span>
               </div>
               <h1 className="font-display text-4xl leading-[0.95] text-white sm:text-7xl lg:text-8xl xl:text-9xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
-                AI, Business <br className="hidden lg:block" />& Systems
+                IA, Negócios <br className="hidden lg:block" />& Sistemas
+
               </h1>
               <p className="mx-auto max-w-2xl text-base leading-7 text-slate-300 sm:text-xl sm:leading-9 lg:mx-0">
-                Direct insights, structured analysis and dense guides for teams that need to move
-                fast without lowering their standards. Built for the modern operational elite.
+                Insights diretos, análises estruturadas e guias densos para equipes que precisam 
+                avançar rápido sem baixar seus padrões. Construído para a elite operacional moderna.
               </p>
+
             </div>
             
             <div className="mx-auto max-w-2xl lg:mx-0">
               <SearchForm
-                buttonLabel="Read insights"
-                placeholder="Search AI, tools, growth, automation..."
+                buttonLabel="Ler insights"
+                placeholder="Buscar IA, ferramentas, crescimento, automação..."
+
                 variant="hero"
               />
             </div>
@@ -90,12 +94,14 @@ export default async function HomePage() {
                 <div className="flex items-center gap-2">
                   <TrendingUp className="size-4 text-primary" />
                   <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-primary">
-                    Featured story
+                    Destaque
+
                   </p>
                 </div>
                 <Link className="text-[10px] font-bold uppercase tracking-widest text-slate-400 transition-colors duration-500 ease-in-out hover:text-primary" href="/blog">
-                  Browse all
+                  Ver tudo
                 </Link>
+
               </div>
               <FeaturedPost post={featuredPost} isDark={true} />
             </div>
@@ -107,8 +113,9 @@ export default async function HomePage() {
       <section className="border-b border-border bg-muted/20">
         <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-8 gap-y-4 px-6 py-6">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            Top Categories:
+            Principais Categorias:
           </p>
+
           <div className="flex flex-wrap items-center gap-6">
             {categories.slice(0, 6).map((category) => (
               <Link
@@ -127,11 +134,13 @@ export default async function HomePage() {
         <div className="mx-auto w-full max-w-7xl px-6 py-12">
           <div className="mb-6 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-              Knowledge Tracks
+              Trilhas de Conhecimento
+
             </p>
             <h2 className="font-display text-3xl leading-none text-foreground sm:text-5xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
-              Structured analysis for the modern operational elite.
+              Análise estruturada para a elite operacional moderna.
             </h2>
+
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             {editorialPillars.map((item) => (
@@ -154,21 +163,25 @@ export default async function HomePage() {
             <div className="flex items-center gap-2">
               <Zap className="size-4 text-primary" />
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-                Latest Breakdown
+                Últimas Análises
+
               </p>
             </div>
             <h2 className="font-display text-4xl leading-tight text-foreground sm:text-6xl transition-colors duration-500 ease-in-out hover:text-primary cursor-default">
-              Recent articles worth the scroll
+              Artigos recentes que valem a leitura
             </h2>
+
             <p className="max-w-2xl text-base text-muted-foreground">
-              Practical guides and deep-dives released this week for operators moving at the speed of AI.
+              Guias práticos e deep-dives lançados esta semana para operadores que se movem na velocidade da IA.
             </p>
+
           </div>
           <Link 
             className="group inline-flex items-center gap-2 text-sm font-bold text-foreground transition-colors duration-500 ease-in-out hover:text-primary" 
             href="/blog"
           >
-            View all articles
+            Ver todos os artigos
+
             <ArrowRight className="size-4 transition group-hover:translate-x-1" />
           </Link>
         </div>
@@ -181,9 +194,10 @@ export default async function HomePage() {
         ) : (
           <div className="mt-12 rounded-2xl border border-border bg-muted/30 p-12 text-center">
             <p className="text-muted-foreground italic">
-              No published articles yet. The layout is already optimized for a dense editorial feed.
+              Ainda não há artigos publicados. O layout já está otimizado para um feed editorial denso.
             </p>
           </div>
+
         )}
       </section>
 

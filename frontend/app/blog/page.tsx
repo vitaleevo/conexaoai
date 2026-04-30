@@ -55,23 +55,28 @@ export default async function BlogPage({
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Blog</BreadcrumbPage>
+                <BreadcrumbPage>Análises</BreadcrumbPage>
               </BreadcrumbItem>
+
             </BreadcrumbList>
           </Breadcrumb>
           <div className="max-w-4xl space-y-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-              Blog
+              Análises
+
             </p>
             <h1 className="font-display text-5xl leading-[0.96] text-foreground sm:text-6xl">
-              Clear editorial structure for people building with AI.
+              Estrutura editorial clara para quem constrói com IA.
             </h1>
+
             <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
-              Every post is designed to be easy to scan in five seconds, then rich enough to keep
-              serious readers engaged to the end.
+              Cada artigo é desenhado para ser lido em cinco segundos, e profundo o suficiente para 
+              prender leitores sérios até o fim.
             </p>
+
           </div>
-          <SearchForm buttonLabel="Search" variant="page" />
+          <SearchForm buttonLabel="Buscar" variant="page" />
+
           <div className="flex flex-wrap gap-3">
             {topicLinks.map((item) => (
               <Link
@@ -104,9 +109,9 @@ export default async function BlogPage({
           </>
         ) : (
           <div className="rounded-lg border border-border bg-background p-6 text-sm leading-7 text-muted-foreground">
-            No published posts yet. Once content is live, this page becomes the primary editorial
-            archive.
+            Ainda não há artigos publicados. Assim que o conteúdo estiver no ar, esta página se tornará o arquivo editorial primário.
           </div>
+
         )}
       </section>
     </>

@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import identify_hasher
 from rest_framework.test import APIClient
-from apps.accounts.models import AuthorProfile
+from apps.blog.models import Author
 
 User = get_user_model()
 
@@ -22,9 +22,9 @@ def test_user_permissions_rbac():
     """
     admin = User.objects.create_superuser(username="admin_test", password="AdminPassword123!", email="admin@test.com")
     
-    # Create a regular user
+    # Create a regular user with Author profile
     user_author = User.objects.create_user(username='regularuser', password='password123')
-    AuthorProfile.objects.create(user=user_author, role='user', display_name="Regular User")
+    Author.objects.create(user=user_author, role='author')
     
     assert admin.is_staff is True
     assert admin.is_superuser is True
@@ -32,4 +32,4 @@ def test_user_permissions_rbac():
     assert user_author.is_superuser is False
     
     # Test Role
-    assert user_author.author_profile.role == 'user'
+    assert user_author.author.role == 'author'

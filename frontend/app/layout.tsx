@@ -8,11 +8,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Conexao AI — AI, Business & Systems for the Modern Internet",
-    template: "%s | Conexao AI",
+    default: "ConexãoAI — IA, Negócios e Sistemas para a Internet Moderna",
+    template: "%s | ConexãoAI",
   },
   description:
-    "Direct insights, deep guides and practical systems for teams building with AI, business leverage and internet operations.",
+    "Insights diretos, guias práticos e sistemas para equipes construindo com IA, alavancagem de negócios e operações na internet.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://conexao.ai"),
   icons: {
     icon: [{ url: "/brand/logo-mark.png", type: "image/png" }],
@@ -22,30 +22,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
     languages: {
-      "en-US": "/",
-      "en-GB": "/",
-      "en-SG": "/",
+      "pt-BR": "/",
       "x-default": "/",
     },
   },
   openGraph: {
-    siteName: "Conexao AI",
+    siteName: "ConexãoAI",
     type: "website",
-    locale: "en_US",
+    locale: "pt_BR",
     images: [
       {
         url: "/og-default.png",
         width: 1200,
         height: 630,
-        alt: "Conexao AI — Intelligence for Global Operators",
+        alt: "ConexãoAI — Inteligência para Operadores Globais",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     images: ["/og-default.png"],
-    title: "Conexao AI — Intelligence for Global Operators",
-    description: "Direct insights, structured analysis and dense guides for the modern operational elite.",
+    title: "ConexãoAI — Inteligência para Operadores Globais",
+    description: "Insights diretos, análise estruturada e guias densos para a elite operacional moderna.",
   },
   robots: { index: true, follow: true },
 };
@@ -53,9 +51,10 @@ export const metadata: Metadata = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Conexao AI",
+  name: "ConexãoAI",
   url: "https://conexao.ai",
   image: "https://conexao.ai/og-default.png",
+  inLanguage: "pt-BR",
   potentialAction: {
     "@type": "SearchAction",
     target: "https://conexao.ai/search?q={search_term_string}",
@@ -65,22 +64,31 @@ const websiteSchema = {
 
 import { BehavioralTracker } from "@/components/analytics/BehavioralTracker";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { PostHogProvider } from "@/components/providers/PostHogProvider";
+import PostHogPageView from "@/components/providers/PostHogPageView";
+import { Suspense } from "react";
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className="font-sans">
-      <body suppressHydrationWarning>
-        <BehavioralTracker />
-        <JsonLd data={websiteSchema} />
-        <TooltipProvider>
-          <div className="flex min-h-screen flex-col bg-background">
-            <Header />
-            <main className="flex-1 pb-16 md:pb-0">{children}</main>
-            <Footer />
-            <MobileNav />
-          </div>
-        </TooltipProvider>
+    <html lang="pt-BR" suppressHydrationWarning className="font-sans">
+        <PostHogProvider>
+          <BehavioralTracker />
+          <JsonLd data={websiteSchema} />
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
+          <TooltipProvider>
+            <div className="flex min-h-screen flex-col bg-background">
+              <Header />
+              <main className="flex-1 pb-16 md:pb-0">{children}</main>
+              <Footer />
+              <MobileNav />
+            </div>
+          </TooltipProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
 }
+

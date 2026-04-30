@@ -56,3 +56,9 @@ frontend/devserver.err.log
 opencode/
 frontend/AGENTS.md
 frontend/CLAUDE.md
+.agents/
+.claude/
+graphify-out/
+skills-lock.json
+testsprite/
+.testsprite/

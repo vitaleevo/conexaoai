@@ -67,18 +67,22 @@ class PostDetailView(generics.RetrieveAPIView):
     serializer_class = PostDetailSerializer
     lookup_field = "slug"
 
+    @method_decorator(cache_page(60 * 15))
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
 
 class PostSlugListView(generics.ListAPIView):
     queryset = Post.objects.filter(
         status="published",
         published_at__lte=timezone.now()
     ).only("slug")
-    serializer_class = PostListSerializer
     pagination_class = None
 
+    @method_decorator(cache_page(60 * 60))
     def list(self, request, *args, **kwargs):
-        slugs = self.get_queryset().values("slug")
-        return Response(list(slugs))
+        slugs = self.get_queryset().values_list("slug", flat=True)
+        return Response({"slugs": list(slugs)})
 
 
 class RelatedPostsView(generics.ListAPIView):
@@ -111,6 +115,10 @@ class RelatedPostsView(generics.ListAPIView):
             .distinct()[:4]
         )
 
+    @method_decorator(cache_page(60 * 15))
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.annotate(
@@ -119,6 +127,10 @@ class CategoryListView(generics.ListAPIView):
     serializer_class = CategorySerializer
     pagination_class = None
 
+    @method_decorator(cache_page(60 * 60))
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
 
 class TagListView(generics.ListAPIView):
     queryset = Tag.objects.annotate(
@@ -126,3 +138,7 @@ class TagListView(generics.ListAPIView):
     ).filter(post_count__gt=0).order_by("-post_count")
     serializer_class = TagSerializer
     pagination_class = None
+
+    @method_decorator(cache_page(60 * 60))
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)

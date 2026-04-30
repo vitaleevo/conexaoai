@@ -29,12 +29,13 @@ const styles = {
 } as const;
 
 export function SearchForm({
-  buttonLabel = "Search",
+  buttonLabel = "Buscar",
   className = "",
   defaultValue = "",
-  placeholder = "Search AI, business, tools and guides...",
+  placeholder = "Buscar IA, negócios, ferramentas e guias...",
   variant = "page",
 }: SearchFormProps) {
+
   const current = styles[variant];
 
   return (

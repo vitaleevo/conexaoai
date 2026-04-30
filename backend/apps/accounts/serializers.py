@@ -1,20 +1,20 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import AuthorProfile
+from apps.blog.models import Author
 
 
-class AuthorProfileSerializer(serializers.ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
 
     class Meta:
-        model = AuthorProfile
-        fields = ["display_name", "bio", "avatar", "website", "email"]
+        model = Author
+        fields = ["bio", "avatar", "website", "twitter", "linkedin", "credentials", "email"]
 
 
 class UserSerializer(serializers.ModelSerializer):
-    author_profile = AuthorProfileSerializer(read_only=True)
+    author = AuthorSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "username", "first_name", "last_name", "author_profile"]
+        fields = ["id", "username", "first_name", "last_name", "author"]

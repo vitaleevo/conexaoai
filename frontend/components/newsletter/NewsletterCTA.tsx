@@ -17,16 +17,19 @@ export function NewsletterCTA() {
                   <Mail className="size-4 text-primary" />
                 </div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-                  The Weekly Intelligence
+                  Inteligência Semanal
                 </p>
+
               </div>
-              <h2 className="font-display text-4xl leading-[1.05] text-foreground sm:text-6xl">
-                Get the next clear breakdown before everyone else.
-              </h2>
-              <p className="text-lg leading-8 text-muted-foreground">
-                Weekly insights on AI, business systems, tools and internet operations with zero visual
-                noise and no filler. Joined by 10,000+ global operators.
-              </p>
+               <h2 className="font-display text-4xl leading-[1.05] text-foreground sm:text-6xl">
+                 Receba a próxima análise clara antes de todo mundo.
+               </h2>
+
+               <p className="text-lg leading-8 text-muted-foreground">
+                 Insights semanais sobre IA, sistemas de negócios, ferramentas e operações na internet, 
+                 com zero ruído visual. Junte-se a mais de 10.000 operadores globais.
+               </p>
+
             </div>
             
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -34,13 +37,15 @@ export function NewsletterCTA() {
                 className="inline-flex h-12 sm:h-14 items-center justify-center rounded-xl bg-primary px-6 sm:px-8 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90 active:scale-[0.98]"
                 href="/newsletter"
               >
-                Join the newsletter
+                Entrar na Newsletter
+
               </Link>
               <Link
                 className="group inline-flex h-12 sm:h-14 items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 sm:px-8 text-sm font-bold text-foreground transition hover:bg-muted active:scale-[0.98]"
                 href="/blog"
               >
-                Browse samples
+                Ver exemplos
+
                 <ArrowRight className="size-4 transition group-hover:translate-x-1" />
               </Link>
             </div>

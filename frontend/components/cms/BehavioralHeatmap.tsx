@@ -9,12 +9,26 @@ interface Click {
   y_percent: number;
 }
 
-export default function BehavioralHeatmap() {
+interface BehavioralHeatmapProps {
+  path?: string;
+  title?: string;
+  showSelector?: boolean;
+}
+
+export default function BehavioralHeatmap({ 
+  path: initialPath = "/", 
+  title = "Mapa de Cliques (Behavioral)",
+  showSelector = true
+}: BehavioralHeatmapProps) {
   const [clicks, setClicks] = useState<Click[]>([]);
   const [loading, setLoading] = useState(true);
-  const [path, setPath] = useState("/");
+  const [path, setPath] = useState(initialPath);
   const [refreshKey, forceRefresh] = useReducer((x: number) => x + 1, 0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setPath(initialPath);
+  }, [initialPath]);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,20 +61,22 @@ export default function BehavioralHeatmap() {
             <MousePointer2 className="w-4 h-4 text-indigo-600" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Mapa de Cliques (Behavioral)</h3>
+            <h3 className="text-sm font-bold text-slate-900">{title}</h3>
             <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">Visualização de Pontos Quentes</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <select 
-            value={path} 
-            onChange={(e) => setPath(e.target.value)}
-            className="text-xs font-semibold bg-white border border-slate-200 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-indigo-500/20"
-          >
-            <option value="/">Home Page</option>
-            <option value="/blog">Blog List</option>
-            <option value="/about">About</option>
-          </select>
+          {showSelector && (
+            <select 
+              value={path} 
+              onChange={(e) => setPath(e.target.value)}
+              className="text-xs font-semibold bg-white border border-slate-200 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-indigo-500/20"
+            >
+              <option value="/">Home Page</option>
+              <option value="/blog">Blog List</option>
+              <option value="/about">About</option>
+            </select>
+          )}
           <button 
             onClick={forceRefresh}
             className="p-1.5 hover:bg-slate-200 rounded-md transition-colors"

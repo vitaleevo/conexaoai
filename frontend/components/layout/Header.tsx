@@ -22,8 +22,9 @@ export function Header() {
             <SearchForm variant="header" />
           </div>
           <Link href="/newsletter" className={buttonVariants({ className: "hidden sm:inline-flex rounded-full px-6" })}>
-            Subscribe
+            Assinar
           </Link>
+
         </div>
       </div>
     </header>
