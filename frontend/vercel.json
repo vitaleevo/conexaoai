@@ -3,11 +3,5 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@api_url",
-    "NEXT_PUBLIC_SITE_URL": "@site_url",
-    "NEXT_PUBLIC_SITE_NAME": "Conexao AI",
-    "NEXT_PUBLIC_GA_ID": "@ga_id"
-  }
+  "devCommand": "npm run dev"
 }

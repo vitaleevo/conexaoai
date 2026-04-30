@@ -8,7 +8,7 @@ import * as z from "zod";
 import { Save, Image as ImageIcon, Settings, Tag, Globe, ArrowLeft, Loader2, FileText, Eye, Edit3, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark/gfm";
+import remarkGfm from "remark-gfm";
 import { cmsFetch } from "@/lib/cms-api";
 import BehavioralHeatmap from "@/components/cms/BehavioralHeatmap";
 import SeoPanel from "@/components/cms/SeoPanel";
@@ -49,12 +49,7 @@ export default function PostForm({ initialData, postId }: PostFormProps) {
   const [isPreview, setIsPreview] = useState(false);
   const [activeTab, setActiveTab] = useState<"editor" | "heatmap">("editor");
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<PostFormValues>({
+  const methods = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       title: initialData?.title || "",
@@ -73,6 +68,8 @@ export default function PostForm({ initialData, postId }: PostFormProps) {
       published_at: initialData?.published_at || "",
     },
   });
+
+  const { register, handleSubmit, watch, formState: { errors } } = methods;
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const content = watch("content");
@@ -127,7 +124,7 @@ export default function PostForm({ initialData, postId }: PostFormProps) {
   };
 
   return (
-    <FormProvider {...{ register, handleSubmit, watch, formState: { errors } }}>
+    <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-24">
       {/* Header Actions */}
       <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm sticky top-0 z-20">
@@ -362,6 +359,7 @@ export default function PostForm({ initialData, postId }: PostFormProps) {
           </div>
         </div>
       )}
-    </form>
+      </form>
+    </FormProvider>
   );
 }

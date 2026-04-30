@@ -7,10 +7,6 @@ import { cmsFetch } from "@/lib/cms-api";
 import ActivityHeatmap from "@/components/cms/ActivityHeatmap";
 import BehavioralHeatmap from "@/components/cms/BehavioralHeatmap";
 
-export const metadata = {
-  title: "Dashboard CMS | ConexãoAI",
-};
-
 interface DashboardStats {
   posts: {
     total: number;

@@ -72,6 +72,7 @@ import { Suspense } from "react";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning className="font-sans">
+      <body>
         <PostHogProvider>
           <BehavioralTracker />
           <JsonLd data={websiteSchema} />
