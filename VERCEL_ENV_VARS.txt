@@ -1,0 +1,34 @@
+# ============================================================
+#  VARIÁVEIS DE AMBIENTE — VERCEL (Frontend: ai.conexao.ao)
+#  Projeto: Conexão AI
+#  Atualizado: 2026-05-01
+# ============================================================
+#
+#  INSTRUÇÕES:
+#  1. No painel Vercel → Settings → Environment Variables
+#  2. Adicione cada variável abaixo (Nome = Valor)
+#  3. Marque o ambiente "Production" para todas
+#  4. Após salvar, faça um Redeploy para aplicar
+#
+# ============================================================
+
+# ── APLICAÇÃO (OBRIGATÓRIAS) ─────────────────────────────────
+
+NEXT_PUBLIC_API_URL=https://api.conexao.ao/api
+NEXT_PUBLIC_SITE_URL=https://ai.conexao.ao
+NEXT_PUBLIC_SITE_NAME=Conexao AI
+NEXT_PUBLIC_NEWSLETTER_WORKER_URL=https://newsletter-worker.holyconexao.workers.dev
+
+# ── SENTRY — Build de Sourcemaps (OBRIGATÓRIA para builds) ───
+
+SENTRY_ORG=conexao-ai-frontend
+SENTRY_PROJECT=conexao-ai-frontend
+SENTRY_AUTH_TOKEN=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
+
+# ── OPCIONAIS (ativar mais tarde quando necessário) ───────────
+# Descomente e preencha quando quiser ativar:
+
+# NEXT_PUBLIC_SENTRY_DSN=
+# NEXT_PUBLIC_POSTHOG_KEY=
+# NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
+# NEXT_PUBLIC_GA_ID=
