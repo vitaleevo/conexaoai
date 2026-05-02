@@ -10,7 +10,9 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "start": "next start",
     "lint": "eslint",
-    "test:security": "node scripts/smoke-supabase-security.mjs"
+    "test:security": "node scripts/smoke-supabase-security.mjs",
+    "test:cms-auth": "node scripts/smoke-cms-auth.mjs",
+    "test:cms-routes": "node scripts/smoke-cms-routes.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

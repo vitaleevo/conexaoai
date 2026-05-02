@@ -6,12 +6,12 @@ Estado atual: frontend Next.js com backend Supabase. Não existe API própria ex
 
 Status: parcial
 
-- Pendente: criar o primeiro utilizador editorial no Supabase Auth.
-- Confirmar login em `/cms/login`.
-- Validar acesso protegido em `/cms`, `/cms/posts`, `/cms/media`, `/cms/newsletter`.
-- Confirmar logout e redirecionamento para login.
+- Implementado: primeiro utilizador editorial criado no Supabase Auth.
+- Implementado: login Supabase validado por smoke test.
+- Implementado: acesso protegido de `/cms/*` redireciona anônimos para `/cms/login`.
+- Implementado: logout Supabase mantido no header do CMS.
 - Implementado: policies de CMS agora usam roles reais (`admin`, `manager`, `editor`, `author`, `viewer`).
-- Pendente: amarrar `authors.user_id` ao utilizador Supabase Auth.
+- Implementado: `authors.user_id` amarrado ao utilizador Supabase Auth.
 
 ## 2. Dados editoriais
 
@@ -19,7 +19,7 @@ Status: parcial
 
 - Implementado: conteúdo inicial real com posts publicados, um draft, categorias e tags.
 - Implementado: anônimos veem só posts publicados; drafts ficam bloqueados por RLS.
-- Validar criação, edição e remoção de posts pelo CMS.
+- Implementado: criação, edição e remoção de posts validadas com utilizador CMS autenticado.
 - Implementado: contadores `post_count` de categorias e tags são recalculados por trigger.
 - Implementado: triggers para `updated_at`.
 
@@ -27,10 +27,10 @@ Status: parcial
 
 Status: parcial
 
-- Testar upload autenticado no bucket `media`.
-- Confirmar URLs públicas de imagens sem permitir listagem ampla do bucket.
-- Validar remoção de assets do Storage ao apagar media no CMS.
-- Definir limites de tamanho e tipos aceites para imagens.
+- Implementado: upload autenticado no bucket `media` validado.
+- Implementado: URLs públicas de imagens preservadas sem policy ampla de listagem.
+- Implementado: remoção de asset e objeto do Storage validada.
+- Implementado: bucket limitado a imagens e 5 MB; CMS também valida tipo e tamanho.
 
 ## 4. Segurança
 
@@ -64,8 +64,8 @@ Status: parcial
 - Manter `npm run lint` verde.
 - Manter `npm run build` verde.
 - Implementado: `npm run test:security` valida leitura pública só de posts publicados e bloqueio de insert anônimo.
-- Pendente: teste automatizado de redirecionamento de `/cms/*` sem sessão.
-- Pendente: teste automatizado de login com Supabase.
+- Implementado: `npm run test:cms-routes` valida redirecionamento de `/cms/*` sem sessão.
+- Implementado: `npm run test:cms-auth` valida login Supabase e operações CMS autenticadas.
 
 ## Próximo Passo Imediato
 

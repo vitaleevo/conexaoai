@@ -3,6 +3,8 @@ import { supabase } from "./supabase";
 
 type CmsFetchOptions = RequestInit & { headers?: Record<string, string> };
 type CmsPostPayload = Record<string, unknown>;
+const MAX_MEDIA_UPLOAD_BYTES = 5 * 1024 * 1024;
+const ALLOWED_MEDIA_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"]);
 
 function parseEndpoint(endpoint: string) {
   const [path, query = ""] = endpoint.replace(/^\/+/, "").split("?");
@@ -74,6 +76,8 @@ async function handleMedia(parts: string[], options?: CmsFetchOptions) {
   if (method === "POST" && options?.body instanceof FormData) {
     const file = options.body.get("file");
     if (!(file instanceof File)) throw new Error("No file provided.");
+    if (!ALLOWED_MEDIA_MIME_TYPES.has(file.type)) throw new Error("Unsupported media type.");
+    if (file.size > MAX_MEDIA_UPLOAD_BYTES) throw new Error("Media file is too large.");
 
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
     const path = `library/${Date.now()}-${safeName}`;
