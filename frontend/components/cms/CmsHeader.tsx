@@ -1,7 +1,19 @@
-import { Bell, Plus, UserCircle } from "lucide-react";
+"use client";
+
+import { Bell, LogOut, Plus, UserCircle } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { clearCmsTokens } from "@/lib/cms-api";
 
 export default function CmsHeader() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await clearCmsTokens();
+    router.replace("/cms/login");
+    router.refresh();
+  };
+
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-10">
       <div className="flex items-center gap-2">
@@ -28,6 +40,15 @@ export default function CmsHeader() {
         <button className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors">
           <UserCircle className="w-7 h-7 text-slate-300" />
           <span>Editor</span>
+        </button>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+          aria-label="Terminar sessão"
+          title="Terminar sessão"
+        >
+          <LogOut className="h-4 w-4" />
         </button>
       </div>
     </header>

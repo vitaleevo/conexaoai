@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Lock, Mail, ArrowRight, Loader2 } from "lucide-react";
-import { setCmsTokens } from "@/lib/cms-api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
-export default function CmsLoginPage() {
+function CmsLoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,22 +19,11 @@ export default function CmsLoginPage() {
     setError("");
 
     try {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_URL 
-          ? `${process.env.NEXT_PUBLIC_API_URL}/cms/auth/login/`
-          : "http://localhost:8000/api/cms/auth/login/",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: email, password }),
-        }
-      );
-
-      if (!res.ok) throw new Error("Credenciais inválidas");
-
-      const data = (await res.json()) as { access: string; refresh: string };
-      setCmsTokens(data.access, data.refresh);
-      router.push("/cms");
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw new Error("Credenciais inválidas");
+      const next = searchParams.get("next");
+      router.replace(next?.startsWith("/cms") ? next : "/cms");
+      router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Erro de autenticação");
     } finally {
@@ -145,5 +135,13 @@ export default function CmsLoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function CmsLoginPage() {
+  return (
+    <Suspense>
+      <CmsLoginForm />
+    </Suspense>
   );
 }
