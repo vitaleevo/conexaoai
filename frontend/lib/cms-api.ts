@@ -210,15 +210,29 @@ export async function cmsFetch<T>(endpoint: string, options?: CmsFetchOptions): 
 
   if (resource === "me") {
     const user = await requireUser();
+    const { data: authorProfile, error: authorError } = await supabase
+      .from("authors")
+      .select("id,name,email,role")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (authorError) throw authorError;
+
+    const fullName =
+      typeof authorProfile?.name === "string" && authorProfile.name.trim().length > 0
+        ? authorProfile.name.trim()
+        : String(user.user_metadata?.full_name ?? "").trim();
+    const [firstName = "", ...restNames] = fullName.split(/\s+/).filter(Boolean);
+
     return {
       id: user.id,
       username: user.email,
       email: user.email,
-      first_name: user.user_metadata?.first_name ?? "",
-      last_name: user.user_metadata?.last_name ?? "",
+      first_name: String(user.user_metadata?.first_name ?? firstName),
+      last_name: String(user.user_metadata?.last_name ?? restNames.join(" ")),
       is_staff: true,
-      is_superuser: false,
-      role: "editor",
+      is_superuser: authorProfile?.role === "admin",
+      role: authorProfile?.role ?? "viewer",
     } as T;
   }
 
@@ -293,7 +307,15 @@ export async function cmsFetch<T>(endpoint: string, options?: CmsFetchOptions): 
 
     const rows = await getTable(table);
     if (resource === "authors") {
-      return rows.map((row) => ({ ...row, user: { username: row.name || row.email } })) as T;
+      return rows.map((row) => ({
+        ...row,
+        user: {
+          username: row.email || row.name || "",
+          email: row.email || "",
+          first_name: row.name || "",
+          last_name: "",
+        },
+      })) as T;
     }
     return rows as T;
   }
