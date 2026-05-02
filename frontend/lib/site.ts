@@ -1,57 +1,56 @@
 import { Zap, Globe, Cpu } from "lucide-react";
 
 export const primaryNav = [
-  { href: "/search?q=ia", label: "IA" },
-  { href: "/search?q=negocios", label: "Negócios" },
-  { href: "/search?q=ferramentas", label: "Ferramentas" },
-  { href: "/search?q=guias", label: "Guias" },
-  { href: "/blog", label: "Análises" },
+  { href: "/search?q=ai", label: "AI" },
+  { href: "/search?q=business", label: "Business" },
+  { href: "/search?q=tools", label: "Tools" },
+  { href: "/search?q=guides", label: "Guides" },
+  { href: "/blog", label: "Analysis" },
 ];
 
 
 export const editorialPillars = [
   {
-    href: "/search?q=agentes+ia",
-    label: "Agentes de IA",
-    description: "Arquitetura e deploy de agentes autônomos com valor real de negócio.",
+    href: "/search?q=ai+agents",
+    label: "AI Agents",
+    description: "Architecture and deployment of autonomous agents with real business value.",
   },
   {
     href: "/search?q=saas",
     label: "SaaS Ops",
-    description: "Sistemas para construir, rodar e escalar operações de software enxutas.",
+    description: "Systems for building, running and scaling lean software operations.",
   },
   {
-    href: "/search?q=crescimento",
-    label: "Crescimento",
-    description: "Distribuição moderna, monetização e sistemas de receita para a era da IA.",
+    href: "/search?q=growth",
+    label: "Growth",
+    description: "Modern distribution, monetization and revenue systems for the AI era.",
   },
   {
-    href: "/search?q=automacao",
-    label: "Automação",
-    description: "Lógica prática para substituir fluxos manuais e aumentar a velocidade da equipe.",
+    href: "/search?q=automation",
+    label: "Automation",
+    description: "Practical logic for replacing manual workflows and increasing team velocity.",
   },
   {
-    href: "/search?q=guias",
-    label: "Guias",
-    description: "Walkthroughs técnicos densos e blueprints para operadores globais.",
+    href: "/search?q=guides",
+    label: "Guides",
+    description: "Dense technical walkthroughs and blueprints for global operators.",
   },
 ];
 
 export const homepageSignals = [
   {
-    title: "Implementação de IA",
-    description: "Fluxos de trabalho do mundo real, de prompts complexos a sistemas de produção automatizados.",
+    title: "AI Implementation",
+    description: "Real-world workflows, from complex prompts to automated production systems.",
     icon: Zap,
   },
   {
-    title: "Alavancagem de Negócios",
-    description: "Modelos de monetização e estratégias de escala para a economia moderna da internet.",
+    title: "Business Leverage",
+    description: "Monetization models and scale strategies for the modern internet economy.",
     icon: Globe,
   },
   {
-    title: "Sistemas & Ferramentas",
-    description: "Decisões de stack e playbooks de automação que multiplicam a entrega da sua equipe.",
+    title: "Systems & Tools",
+    description: "Stack decisions and automation playbooks that multiply team output.",
     icon: Cpu,
   },
 ];
-
